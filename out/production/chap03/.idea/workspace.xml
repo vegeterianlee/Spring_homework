@@ -5,14 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb467b2f-a7b8-49bc-9bf1-9324a61f4e30" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chap03.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chap03.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework/Bus.java" beforeDir="false" afterPath="$PROJECT_DIR$/homework/Bus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework/Taxi.java" beforeDir="false" afterPath="$PROJECT_DIR$/homework/Taxi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework/testBus.java" beforeDir="false" afterPath="$PROJECT_DIR$/homework/testBus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework/testTaxi.java" beforeDir="false" afterPath="$PROJECT_DIR$/homework/testTaxi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework/transportation.java" beforeDir="false" afterPath="$PROJECT_DIR$/homework/transportation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chap03.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homework/Bus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homework/Taxi.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homework/testBus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/homework/transportation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +50,6 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -60,7 +61,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675399535609</updated>
-      <workItem from="1675399536773" duration="9955000" />
+      <workItem from="1675399536773" duration="2278000" />
     </task>
     <servers />
   </component>
