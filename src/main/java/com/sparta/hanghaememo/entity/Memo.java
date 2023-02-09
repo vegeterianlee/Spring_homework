@@ -2,6 +2,7 @@ package com.sparta.hanghaememo.entity;
 
 import com.sparta.hanghaememo.dto.MemoRequestDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
+
 public class Memo extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +32,7 @@ public class Memo extends Timestamped {
         this.password = requestDto.getPassword();
         this.title = requestDto.getTitle();
     }
-    public void update(MemoRequestDto memoRequestDto) {
+    public void update(MemoRequestDto memoRequestDto) { //객체 생성 후 수정하고 싶어서 메서드 생성
         this.author = memoRequestDto.getAuthor();
         this.content = memoRequestDto.getContent();
         this.password = memoRequestDto.getPassword();
