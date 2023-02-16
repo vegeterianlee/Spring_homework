@@ -11,15 +11,5 @@ public class MemoRequestDto { //계층 간 데이터 전송을 위해 도메인 
     private String content;
    /* private String password;*/
 
-    //postman에서 데이터 넣으면 알아서 Dto로 저장되는 이유?
 
-    /*public static MemoRequestDto of(Memo memo){
-        return MemoRequestDto.builder()
-                .id(memo.getId())
-                .title(memo.getTitle())
-                .author(memo.getAuthor())
-                .content(memo.getContent())
-                .password(memo.getPassword())
-                .build();
-    }*/
 }

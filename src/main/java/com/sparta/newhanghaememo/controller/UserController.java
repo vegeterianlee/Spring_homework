@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
-@RestController
+@RestController //json 방식으로 보려면 필수조건 = ResponseBody
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class UserController {

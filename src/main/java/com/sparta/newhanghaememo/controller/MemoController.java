@@ -7,14 +7,14 @@ import com.sparta.newhanghaememo.jwt.JwtUtil;
 import com.sparta.newhanghaememo.repository.UserRepository;
 import com.sparta.newhanghaememo.service.MemoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("/request")
 public class MemoController {
 
     private final MemoService memoService;
@@ -24,13 +24,13 @@ public class MemoController {
     //저장
     @PostMapping("/api/post") //return값이 프론트엔드로 간다
     public MemoResponseDto createMemo(@RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
-            return memoService.createMemo(requestDto,request);
+        return memoService.createMemo(requestDto,request);
     }
 
 
     //조회
     @GetMapping("/api/posts")
-    public List<MemoResponseDto> getMemos() {
+    public ResponseEntity<Map<String,Object>> getMemos() {
         return memoService.getMemos();
     }
 
