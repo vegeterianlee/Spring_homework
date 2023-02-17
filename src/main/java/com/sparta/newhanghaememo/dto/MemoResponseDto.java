@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -36,12 +37,11 @@ public class MemoResponseDto {
         //새로 객체를 떠줘야 나오네->new를 적어줘야되니
         //메모에 comment를 one to many 시켜서 해당되는 comment만 나오게끔
         // ResponseDto를 무적권써야되네
-        /*List<Comment>comments=memo.getCommentList();
-        Collections.sort(comments, Collections.reverseOrder());
+        List<Comment>comments=memo.getCommentList();
+
+        //리스트를 클래스로 받았을 때 내림차순 정리하는 법
+        comments.sort(Comparator.comparing(Comment::getCreatedAt).reversed());
         for(Comment comment:comments){
-            this.commentList.add(comment);
-        }*/
-        for (Comment comment: memo.getCommentList()){
             this.commentList.add(new CommentResponseDto(comment));
         }
 
