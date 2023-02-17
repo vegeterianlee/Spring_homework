@@ -2,7 +2,6 @@ package com.sparta.newhanghaememo.controller;
 
 import com.sparta.newhanghaememo.dto.MemoRequestDto;
 import com.sparta.newhanghaememo.dto.MemoResponseDto;
-import com.sparta.newhanghaememo.dto.SuccessResponseDto;
 import com.sparta.newhanghaememo.jwt.JwtUtil;
 import com.sparta.newhanghaememo.repository.UserRepository;
 import com.sparta.newhanghaememo.service.MemoService;
@@ -23,7 +22,7 @@ public class MemoController {
 
     //저장
     @PostMapping("/api/post") //return값이 프론트엔드로 간다
-    public MemoResponseDto createMemo(@RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<?> createMemo(@RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
         return memoService.createMemo(requestDto,request);
     }
 
@@ -41,12 +40,12 @@ public class MemoController {
 
 
     @PutMapping("/api/post/{id}") //@PathVariable, 여기서 @RequestBody로 MemoRequestDto가 오면서 데이터가 입력
-    public MemoResponseDto updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<?> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
         return memoService.update(id,requestDto,request);
     }
 
     @DeleteMapping("/api/post/{id}")
-    public SuccessResponseDto deleteMemo(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<?> deleteMemo(@PathVariable Long id, HttpServletRequest request) {
         return memoService.deleteMemo(id,request);
     }
 

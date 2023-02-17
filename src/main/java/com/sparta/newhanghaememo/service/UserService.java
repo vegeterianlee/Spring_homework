@@ -8,11 +8,12 @@ import com.sparta.newhanghaememo.entity.UserRoleEnum;
 import com.sparta.newhanghaememo.jwt.JwtUtil;
 import com.sparta.newhanghaememo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,14 +25,17 @@ public class UserService {
     //사용자 토큰 create token함수를 통해서 생성된다
 
     @Transactional
-    public SuccessResponseDto signup(SignupRequestDto signupRequestDto) {
+    public ResponseEntity<?> signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
         String password = signupRequestDto.getPassword();
 
         // 회원 중복 확인
-        Optional<User> found = userRepository.findByUsername(username);
-        if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+        //Optional<User> found = userRepository.findByUsername(username);
+        User found = userRepository.findByUsername(username);
+        if (found!=null) {
+            SuccessResponseDto successResponseDto =new SuccessResponseDto("중복된 사용자가 존재합니다.",400);
+            return new ResponseEntity<SuccessResponseDto>(successResponseDto, HttpStatus.BAD_REQUEST);
+            //throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
 
         // 회원 권한 확인
@@ -45,28 +49,38 @@ public class UserService {
 
         User user = new User(username, password, role);
         userRepository.save(user);
-        return new SuccessResponseDto("회원가입 성공",200);
+        SuccessResponseDto successResponseDto =new SuccessResponseDto("회원가입 성공",200);
+        return new ResponseEntity<SuccessResponseDto>(successResponseDto, HttpStatus.OK);
     }
 
 
     //login시 이름과 비밀번호확인
     @Transactional(readOnly = true)
-    public SuccessResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public ResponseEntity<?> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
 
-        // 사용자 확인
+        /*// 사용자 확인
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
-        );
+        );*/
+        User user = userRepository.findByUsername(username);
+        if(user==null){
+            SuccessResponseDto successResponseDto =new SuccessResponseDto("등록된 사용자가 없습니다.",400);
+            return new ResponseEntity<SuccessResponseDto>(successResponseDto, HttpStatus.BAD_REQUEST);
+        }
+
         // 비밀번호 확인
         if(!user.getPassword().equals(password)){
-            throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            SuccessResponseDto successResponseDto =new SuccessResponseDto("회원을 찾을 수 없습니다.",400);
+            return new ResponseEntity<SuccessResponseDto>(successResponseDto, HttpStatus.BAD_REQUEST);
+            //throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         //클라이언트에게 돌아갈 때 header부분에 AUTHORIZATION_HEADER와
         //토큰을 추가해서 보낸다 Authorization : Bearer <JWT>
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getRole()));
-        return new SuccessResponseDto("로그인 성공",200);
+        SuccessResponseDto successResponseDto =new SuccessResponseDto("로그인 성공",200);
+        return new ResponseEntity<SuccessResponseDto>(successResponseDto, HttpStatus.OK);
     }
 
 }

@@ -28,7 +28,8 @@ public class Memo extends Timestamped {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "memo") // comment의 user로 맵핑이 된다
+    @OneToMany(mappedBy = "memo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // comment->memo 로 맵핑이 된다, 부모에 cascade적기
     List<Comment> commentList = new ArrayList<>();
 
 
