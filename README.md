@@ -1,7 +1,7 @@
 # Spring_homework
 
 ERD_image
-<img width="80%" src="https://user-images.githubusercontent.com/122660509/218935953-93f4707a-a64d-4874-a0f5-582d6e3b5cea.png"/>
+<img width="80%" src="![jwt (2)](https://user-images.githubusercontent.com/122660509/220195004-2cb73ae8-1418-4fbe-bb2b-66de15ddaf26.png)"/>
 
 Postman_API
 https://documenter.getpostman.com/view/25736117/2s93CEvbXm
