@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 
 @Getter
 @Entity
@@ -23,7 +25,7 @@ public class Memo extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-    @ManyToOne //many to one에서 외래키 설정해서 one쪽으로 이어진다 생각
+    @ManyToOne(fetch = LAZY) //many to one에서 외래키 설정해서 one쪽으로 이어진다 생각
     // 유저가 있어야 폴더가 생성된다는 느낌으로
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;

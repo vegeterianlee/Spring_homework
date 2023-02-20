@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 
 @Getter
 @Entity
@@ -18,16 +20,16 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-    @ManyToOne //many to one에서 외래키 설정해서 one쪽으로 이어진다 생각
+    @ManyToOne(fetch = LAZY) //many to one에서 외래키 설정해서 one쪽으로 이어진다 생각
     // 유저가 있어야 폴더가 생성된다는 느낌으로
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @ManyToOne //memo에 연결해줘야 해당된 게시글에만 comment가 쌓일 수 있도록
+    @ManyToOne(fetch = LAZY) //memo에 연결해줘야 해당된 게시글에만 comment가 쌓일 수 있도록
     @JoinColumn(name = "Memo_ID", nullable = false)
     private Memo memo;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     private Good good;
 
     public Comment(CommentRequestDto requestDto, User user, Memo memo) {

@@ -17,7 +17,7 @@ public class Good {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "User_ID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
