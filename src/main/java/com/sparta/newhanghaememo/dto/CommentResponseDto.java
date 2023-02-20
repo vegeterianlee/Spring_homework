@@ -13,14 +13,18 @@ public class CommentResponseDto {
     private String content;
     /*private String password;*/
     private String username;
+    private int heart_count;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public CommentResponseDto (Comment comment){
+
+    public CommentResponseDto (Comment comment, int count){
         this.id = comment.getId();
         this.content=comment.getContent();
+        this.heart_count = count;
         this.username=comment.getUser().getUsername();
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
+
     }
 }

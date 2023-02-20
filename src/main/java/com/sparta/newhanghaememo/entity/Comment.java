@@ -27,6 +27,9 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "Memo_ID", nullable = false)
     private Memo memo;
 
+    @ManyToOne
+    private Good good;
+
     public Comment(CommentRequestDto requestDto, User user, Memo memo) {
         this.content = requestDto.getContent();
         this.user = user;
