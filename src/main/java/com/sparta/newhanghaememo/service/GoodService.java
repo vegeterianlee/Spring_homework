@@ -1,13 +1,8 @@
 package com.sparta.newhanghaememo.service;
 
 import com.sparta.newhanghaememo.dto.SuccessResponseDto;
-import com.sparta.newhanghaememo.entity.Comment;
-import com.sparta.newhanghaememo.entity.Good;
-import com.sparta.newhanghaememo.entity.Memo;
-import com.sparta.newhanghaememo.entity.User;
-import com.sparta.newhanghaememo.repository.CommentRepository;
-import com.sparta.newhanghaememo.repository.GoodRepository;
-import com.sparta.newhanghaememo.repository.MemoRepository;
+import com.sparta.newhanghaememo.entity.*;
+import com.sparta.newhanghaememo.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,47 +16,48 @@ import java.util.Optional;
 public class GoodService {
     private final MemoRepository memoRepository;
     private final CommentRepository commentRepository;
-    private final GoodRepository goodRepository;
+    private final Heart_memoRepository heartMemoRepository;
+    private final Heart_commentRepository heartCommentRepository;
 
     @Transactional
-    public ResponseEntity<?> good_memo(User user, Long id) {
+    public ResponseEntity<?> heart_memo(User user, Long id) {
         Memo memo = memoRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("일치하는 id의 메모가 없습니다")
         );
-        Optional<Good> found = goodRepository.findByMemoAndUser(memo, user);
+        Optional<Heart_memo> found = heartMemoRepository.findByMemoAndUser(memo, user);
         if (found.isPresent()) {
-            goodRepository.deleteById(found.get().getId());
+            heartMemoRepository.deleteById(found.get().getId());
             SuccessResponseDto successResponseDto = new SuccessResponseDto("메모에 좋아요 삭제", HttpStatus.OK.value());
             return ResponseEntity.ok().body(successResponseDto);
         } else {
-            Good good = new Good(user, memo);
-            goodRepository.save(good);
+            Heart_memo heart_memo = new Heart_memo(user, memo);
+            heartMemoRepository.save(heart_memo);
             SuccessResponseDto successResponseDto = new SuccessResponseDto("메모에 좋아요 등록", HttpStatus.OK.value());
             return ResponseEntity.ok().body(successResponseDto);
         }
     }
 
     @Transactional
-    public ResponseEntity<?> good_comment(User user, Long id) {
+    public ResponseEntity<?> heart_comment(User user, Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("일치하는 id의 코멘트가 없습니다")
         );
 
-        Optional<Good> found = goodRepository.findByCommentAndUser(comment, user);
+        Optional<Heart_comment> found = heartCommentRepository.findByCommentAndUser(comment, user);
         if (found.isPresent()) {
-            goodRepository.deleteById(found.get().getId());
+            heartCommentRepository.deleteById(found.get().getId());
             SuccessResponseDto successResponseDto = new SuccessResponseDto("코멘트에 좋아요 삭제", HttpStatus.OK.value());
             return ResponseEntity.ok().body(successResponseDto);
         } else {
-            Good good = new Good(user, comment);
-            goodRepository.save(good);
+            Heart_comment heart_comment = new Heart_comment(user, comment);
+            heartCommentRepository.save(heart_comment);
             SuccessResponseDto successResponseDto = new SuccessResponseDto("코멘트에 좋아요 등록", HttpStatus.OK.value());
             return ResponseEntity.ok().body(successResponseDto);
         }
 
     }
 
-    public int heart_memo_count(Memo memo) {
+    /*public int heart_memo_count(Memo memo) {
         int count = 0;  // 좋아요 갯수 세기
             for (Good good : goodRepository.findByMemoId(memo.getId())) {
                     count++;
@@ -75,5 +71,5 @@ public class GoodService {
                 count++;
         }
         return count;
-    }
+    }*/
 }

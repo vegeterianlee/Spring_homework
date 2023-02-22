@@ -6,7 +6,6 @@ import com.sparta.newhanghaememo.dto.SuccessResponseDto;
 import com.sparta.newhanghaememo.entity.Memo;
 import com.sparta.newhanghaememo.entity.User;
 import com.sparta.newhanghaememo.entity.UserRoleEnum;
-import com.sparta.newhanghaememo.repository.GoodRepository;
 import com.sparta.newhanghaememo.repository.MemoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemoService {
     private final MemoRepository memoRepository;
-    private final GoodRepository goodRepository;
     private final GoodService goodService;
 
     @Transactional
@@ -63,8 +61,7 @@ public class MemoService {
             return null;
         }*/
         Memo memo = memoRepository.save(new Memo(requestDto, user));
-        int count = goodService.heart_memo_count(memo);
-        MemoResponseDto memoResponseDto = new MemoResponseDto(memo,count);
+        MemoResponseDto memoResponseDto = new MemoResponseDto(memo);
         return ResponseEntity.ok().body(memoResponseDto);
         //return new ResponseEntity<MemoResponseDto>(memoResponseDto, HttpStatus.OK);
     }
@@ -75,8 +72,7 @@ public class MemoService {
     public ResponseEntity<Map<String, Object>> getMemos() {
         ArrayList<MemoResponseDto> list = new ArrayList<>();
         for (Memo memo : memoRepository.findAllByOrderByCreatedAtDesc()) {
-            int count = goodService.heart_memo_count(memo);
-            list.add(new MemoResponseDto(memo,count));
+            list.add(new MemoResponseDto(memo));
         }
 
         Map<String, Object> result = new HashMap<>();
@@ -90,8 +86,7 @@ public class MemoService {
         Memo memo = memoRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("일치하는 id가 없습니다")
         );
-        int count = goodService.heart_memo_count(memo);
-        MemoResponseDto memoResponseDto = new MemoResponseDto(memo,count);
+        MemoResponseDto memoResponseDto = new MemoResponseDto(memo);
         return memoResponseDto;
     }
 
@@ -104,9 +99,8 @@ public class MemoService {
                     () -> new IllegalArgumentException("해당 User id를 갖는 유저의 Memo id의 memo가 없습니다")
             );
             memo.update(requestDto);
-            int count = goodService.heart_memo_count(memo);
-            MemoResponseDto memoResponseDto = new MemoResponseDto(memo,count);
-            return ResponseEntity.ok().body(memoResponseDto);
+            MemoResponseDto memoResponseDto = new MemoResponseDto(memo);
+            return ResponseEntity.ok().body(memoResponseDto); //(msg=body)
             // return new ResponseEntity<MemoResponseDto>(memoResponseDto,HttpStatus.OK);
 
         } else {
@@ -114,8 +108,7 @@ public class MemoService {
                     () -> new IllegalArgumentException("해당 id를 갖는 memo가 없습니다")
             );
             memo.update(requestDto);
-            int count = goodService.heart_memo_count(memo);
-            MemoResponseDto memoResponseDto = new MemoResponseDto(memo,count);
+            MemoResponseDto memoResponseDto = new MemoResponseDto(memo);
             return ResponseEntity.ok().body(memoResponseDto);
             //return new ResponseEntity<MemoResponseDto>(memoResponseDto,HttpStatus.OK);
         }

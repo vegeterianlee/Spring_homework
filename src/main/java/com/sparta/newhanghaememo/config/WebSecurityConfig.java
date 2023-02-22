@@ -32,7 +32,10 @@ public class WebSecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         // h2-console url은 filter가 지나친다,, resources 접근 허용 설정은 추후
         return (web) -> web.ignoring()
-                .requestMatchers(PathRequest.toH2Console());
+                .requestMatchers(PathRequest.toH2Console())
+                .antMatchers("/api/v1/auth/**","/",
+                        "/v2/api-docs","/v3/api-docs","/swagger-ui*/**","/swagger-resources/**"
+                        ,"/v2/api-docs","/webjars/**","/swagger/**","/favicon.ico");
                 //.requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
@@ -40,7 +43,14 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
         //회원가입, 로그인까지는 security 인증 없이도 가능함
+        //
         http.authorizeRequests().antMatchers("/api/auth/**").permitAll()
+//                .antMatchers("/v3/api-docs/",
+//                        "/swagger-ui*/**").permitAll()
+
+//                //추가로 설정
+//                .antMatchers("/swagger-resources/**",
+//                        "/v3/api-docs/").permitAll()
                 .anyRequest().authenticated()
                 // JWT 인증/인가를 사용하기 위한 설정
          .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);

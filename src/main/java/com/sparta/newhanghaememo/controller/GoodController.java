@@ -15,14 +15,14 @@ public class GoodController {
     private final GoodService goodService;
     @PostMapping("/api/heart_memo/{id}")
     // 응답 보내기
-    public ResponseEntity<?> goodmemo(@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable Long id) {
-        return goodService.good_memo(userDetails.getUser(),id);
+    public ResponseEntity<?> heartmemo(@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable Long id) {
+        return goodService.heart_memo(userDetails.getUser(),id);
     }
 
     @PostMapping("/api/heart_comment/{id}")
     // 응답 보내기
-    public ResponseEntity<?> goodcomment(@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable Long id) {
-        return goodService.good_comment(userDetails.getUser(),id);
+    public ResponseEntity<?> heartcomment(@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable Long id) {
+        return goodService.heart_comment(userDetails.getUser(),id);
     }
 
 }

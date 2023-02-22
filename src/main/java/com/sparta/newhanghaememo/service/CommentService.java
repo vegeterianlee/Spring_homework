@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final MemoRepository memoRepository;
-    private final GoodService goodService;
     public ResponseEntity<?> createComment(Long id, CommentRequestDto requestDto, User user) {
 
         //게시글이 아예없을 때 오류 발생
@@ -27,8 +26,7 @@ public class CommentService {
                 () -> new IllegalArgumentException("일치하는 id의 게시글이 없습니다")
         );
         Comment comment = commentRepository.save(new Comment(requestDto, user,memo));
-        int count = goodService.heart_comment_count(comment);
-        CommentResponseDto commentResponseDto = new CommentResponseDto(comment,count);
+        CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
         return new ResponseEntity<CommentResponseDto>(commentResponseDto, HttpStatus.OK);
     }
 
@@ -41,8 +39,7 @@ public class CommentService {
                     () -> new IllegalArgumentException("Userid나 코멘트id를 갖는 코멘토가 없습니다")
             );
             comment.update(requestDto);
-            int count = goodService.heart_comment_count(comment);
-            CommentResponseDto commentResponseDto = new CommentResponseDto(comment,count);
+            CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
             return new ResponseEntity<CommentResponseDto>(commentResponseDto, HttpStatus.OK);
 
         } else {
@@ -50,8 +47,7 @@ public class CommentService {
                     () -> new IllegalArgumentException("해당 id를 갖는 코멘트가 없습니다")
             );
             comment.update(requestDto);
-            int count = goodService.heart_comment_count(comment);
-            CommentResponseDto commentResponseDto = new CommentResponseDto(comment,count);
+            CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
             return new ResponseEntity<CommentResponseDto>(commentResponseDto, HttpStatus.OK);
         }
     }
@@ -76,6 +72,5 @@ public class CommentService {
             SuccessResponseDto successResponseDto =new SuccessResponseDto("댓글 삭제 성공",200);
             return new ResponseEntity<SuccessResponseDto>(successResponseDto, HttpStatus.OK);
         }
-
     }
 }
