@@ -1,3 +1,4 @@
+/*
 package com.sparta.newhanghaememo.exception;
 
 import lombok.Getter;
@@ -11,3 +12,4 @@ public class RestApiException {
     private HttpStatus httpStatus;
     private int statusCode;
 }
+*/

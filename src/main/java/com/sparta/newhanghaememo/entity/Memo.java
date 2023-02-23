@@ -18,13 +18,18 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 
 public class Memo extends Timestamped {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@ApiParam(value = "memo ID", required = true)
     private Long id;
 
     @Column(nullable = false)
+    //@ApiParam(value = "title", required = true)
     private String title;
     @Column(nullable = false)
+    //@ApiParam(value = "content", required = true)
     private String content;
 
     @ManyToOne(fetch = LAZY) //many to one에서 외래키 설정해서 one쪽으로 이어진다 생각
@@ -33,11 +38,13 @@ public class Memo extends Timestamped {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @OneToMany(mappedBy = "memo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "memo",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
     // comment->memo 로 맵핑이 된다, 부모에 cascade적어도 되고 자식에 Ondelete해도 되고
     List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "memo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "memo")
     List<Heart_memo> heart_memos = new ArrayList<>();
 
     public Memo(MemoRequestDto requestDto,User user) {

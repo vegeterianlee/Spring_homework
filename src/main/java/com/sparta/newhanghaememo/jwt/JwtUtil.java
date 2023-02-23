@@ -71,27 +71,23 @@ public class JwtUtil {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
-            return false;
            //throw new IllegalArgumentException("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
-            //log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
+            log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
         } catch (ExpiredJwtException e) {
-            return false;
            //throw new IllegalArgumentException("Expired JWT token, 만료된 JWT token 입니다.");
-            //log.info("Expired JWT token, 만료된 JWT token 입니다.");
+            log.info("Expired JWT token, 만료된 JWT token 입니다.");
         } catch (UnsupportedJwtException e) {
-            return false;
            //throw new IllegalArgumentException("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
-            //log.info("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
+            log.info("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {
-            return false;
            //throw new IllegalArgumentException("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
-            //log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+            log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
         }
         catch (SignatureException e) {
-            return false;
             //throw new InvalidAccessTokenException(accessToken);
+            log.info("SignatureExcepted JWT token, JWT 토큰의 문자열이 지워졌습니다.");
         }
-       // return false;
+        return false;
     }
 
     // 토큰에서 사용자(User 데이터) 정보 가져오기

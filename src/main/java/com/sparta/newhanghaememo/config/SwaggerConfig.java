@@ -16,18 +16,19 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 
     private static final String API_NAME = "심화 주차 Lv2 백엔드 블로그";
-    private static final String API_VERSION = "1.0.0";
+    private static final String API_VERSION = "1.0";
     private static final String API_DESCRIPTION = "API 명세서";
 
 
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .useDefaultResponseMessages(false)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sparta"))
-                //.paths(PathSelectors.ant("/api/**"))
-                .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.sparta.newhanghaememo.controller"))
+                .paths(PathSelectors.ant("/api/**"))
+
                 .build();
     }
 

@@ -6,9 +6,10 @@ import com.sparta.newhanghaememo.dto.SuccessResponseDto;
 import com.sparta.newhanghaememo.entity.Memo;
 import com.sparta.newhanghaememo.entity.User;
 import com.sparta.newhanghaememo.entity.UserRoleEnum;
+import com.sparta.newhanghaememo.exception.NotFoundContentsException;
+import com.sparta.newhanghaememo.exception.NotFoundMemberException;
 import com.sparta.newhanghaememo.repository.MemoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemoService {
     private final MemoRepository memoRepository;
-    private final GoodService goodService;
 
     @Transactional
     //데이터 베이스 연결과 저장
@@ -78,21 +78,27 @@ public class MemoService {
         Map<String, Object> result = new HashMap<>();
         result.put("postList", list);
         return ResponseEntity.ok().body(result);
+
+        /*MemoListDto memoListDto= new MemoListDto();
+        List<Memo> memoList = memoRepository.findAllByOrderByCreatedAtDesc();
+        for (Memo memo: memoList){
+            memoListDto.add(new MemoResponseDto(memo));
+        }
+        return memoListDto;*/
     }
 
     //조회: id 포함해서 하나
     @Transactional(readOnly = true)
     public MemoResponseDto getIdMemo(Long id) {
         Memo memo = memoRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("일치하는 id가 없습니다")
+                () -> new NotFoundMemberException() //("일치하는 id가 없습니다")
         );
-        MemoResponseDto memoResponseDto = new MemoResponseDto(memo);
-        return memoResponseDto;
+        return new MemoResponseDto(memo);
     }
 
     @Transactional
-    public ResponseEntity<?> update(Long id, MemoRequestDto requestDto, User user) {
-        UserRoleEnum userRoleEnum = user.getRole();
+    public SuccessResponseDto<MemoResponseDto> update(Long id, MemoRequestDto requestDto, User user) {
+        /*UserRoleEnum userRoleEnum = user.getRole();
         if (userRoleEnum == UserRoleEnum.USER) {
             // 사용자 권한이 USER일 경우
             Memo memo = memoRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
@@ -111,31 +117,24 @@ public class MemoService {
             MemoResponseDto memoResponseDto = new MemoResponseDto(memo);
             return ResponseEntity.ok().body(memoResponseDto);
             //return new ResponseEntity<MemoResponseDto>(memoResponseDto,HttpStatus.OK);
-        }
+        }*/
+        Memo memo = getMemo(id, user);
+        memo.update(requestDto);
+        return SuccessResponseDto.ok(new MemoResponseDto(memo));
     }
 
 
     @Transactional
-    public ResponseEntity<?> deleteMemo(Long id, User user) {
-            UserRoleEnum userRoleEnum = user.getRole();
-            if (userRoleEnum == UserRoleEnum.USER) {
-                // 사용자 권한이 USER일 경우
-                Memo memo = memoRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
-                        () -> new IllegalArgumentException("해당 User id를 갖는 유저의 Memo id의 memo가 없습니다")
-                );
-                memoRepository.deleteById(memo.getId());
-                SuccessResponseDto successResponseDto =new SuccessResponseDto("게시글 삭제 성공",HttpStatus.OK.value());
-                return ResponseEntity.ok().body(successResponseDto);
-                //return new SuccessResponseDto("게시글 삭제 성공", 200);
+    public SuccessResponseDto<String> deleteMemo(Long id, User user) {
+        Memo memo = getMemo(id,user);
+        memoRepository.deleteById(memo.getId());
+        return SuccessResponseDto.ok("게시글 삭제 성공");
+    }
 
-            } else {
-                Memo memo = memoRepository.findById(id).orElseThrow(
-                        () -> new IllegalArgumentException("해당 id를 갖는 memo가 없습니다")
-                );
-                memoRepository.deleteById(memo.getId());
-                SuccessResponseDto successResponseDto =new SuccessResponseDto("게시글 삭제 성공",HttpStatus.OK.value());
-                return ResponseEntity.ok().body(successResponseDto);
-                //return new ResponseEntity<SuccessResponseDto>(successResponseDto, HttpStatus.OK);
-            }
+    //매서드 추출
+    private Memo getMemo(Long id, User user){
+        return (user.getRole()==UserRoleEnum.USER) ?
+                memoRepository.findByIdAndUserId(id, user.getId()).orElseThrow(NotFoundMemberException::new):
+                memoRepository.findById(id).orElseThrow(NotFoundContentsException::new);
     }
 }

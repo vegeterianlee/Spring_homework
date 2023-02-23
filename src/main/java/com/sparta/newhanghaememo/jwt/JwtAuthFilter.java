@@ -5,7 +5,6 @@ import com.sparta.newhanghaememo.dto.SuccessResponseDto;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Slf4j
+@Slf4j //로그를 남기는 방법
+        //로그란 문제의 원인을 파악하기 위한 문제가 발생했을 때 당시의 정보, println은 일시 로그
 @RequiredArgsConstructor //서비스 생성할 때 겸해서 같이 같이온다(repository)
 public class JwtAuthFilter extends OncePerRequestFilter {
 
@@ -27,17 +27,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String token = jwtUtil.resolveToken(request);
-
-        if(token != null) {//회원가입할 때는 토큰이 필요하지 않으므로 분기처리 필요
-            if(!jwtUtil.validateToken(token)){
-                //자동으로 인코팅(Percent-encoding)
+        //회원가입할 때는 토큰이 필요하지 않으므로 분기처리 필요
+        //if(token != null)
+            if(jwtUtil.validateToken(token)){
+                Claims info = jwtUtil.getUserInfoFromToken(token);
+                setAuthentication(info.getSubject()); //username을 매개변수로 받음
+            }
+            /*else{
                 jwtExceptionHandler(response, "토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST.value());
                 return;
-               // throw new IllegalArgumentException("토큰이 유효하지 않습니다.");
-            }
-            Claims info = jwtUtil.getUserInfoFromToken(token);
-            setAuthentication(info.getSubject()); //username을 매개변수로 받음
-        }
+            }*/
         filterChain.doFilter(request,response);
     }
     //Authentication -> context -> SecurityContextHolder
@@ -50,8 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         SecurityContextHolder.setContext(context);
     }
 
-    //따로 Dto형태가 아님에도 반환될 수 있도록 하는법
-    //Cont
+    //따로 Dto형태가 아님에도 반환될 수 있도록 하는법, 컨트롤러 이전에 실행되는 거라 RestAPIExceptionhanlder적용X
     public void jwtExceptionHandler(HttpServletResponse response, String msg, int statusCode) {
         response.setStatus(statusCode);
         response.setContentType("application/json");
